@@ -4,8 +4,19 @@ import path from 'path';
 import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
+  // Dynamically resolve base URL on GitHub Pages depending on the repository name
+  let base = './';
+  if (process.env.GITHUB_REPOSITORY) {
+    const repo = process.env.GITHUB_REPOSITORY.split('/')[1];
+    if (repo && repo.toLowerCase().endsWith('.github.io')) {
+      base = '/';
+    } else if (repo) {
+      base = `/${repo}/`;
+    }
+  }
+
   return {
-    base: './',
+    base,
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
