@@ -1,0 +1,42 @@
+name: Build and Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+# Set GITHUB_TOKEN permissions to allow writing branch contents for JamesIves deployment action
+permissions:
+  contents: write
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: 'npm'
+        
+    - name: Install and Cache Dependencies
+      run: npm ci
+      
+    - name: Verify Types and Build Application
+      run: npm run build
+
+    - name: Deploy to GitHub Pages
+      if: github.event_name == 'push'
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        folder: dist             # The built directory to publish
+        branch: gh-pages         # Target branch to deploy to
+        clean: true              # Clean old assets in gh-pages before committing
