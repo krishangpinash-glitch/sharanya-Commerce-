@@ -6,7 +6,10 @@ export const isStaticEnv =
   typeof window !== "undefined" && 
   (window.location.hostname.endsWith("github.io") || 
    window.location.hostname.includes("github.io") || 
-   window.location.search.includes("mockApi=true"));
+   window.location.search.includes("mockApi=true") ||
+   (!window.location.hostname.includes(".run.app") && 
+    !window.location.hostname.includes("localhost") && 
+    !window.location.hostname.includes("127.0.0.1")));
 
 if (isStaticEnv) {
   console.log("⚡ [SmartCommerce Base Path Resolve] Static GitHub Pages build environment detected.");

@@ -15,6 +15,8 @@ export default defineConfig(() => {
     }
   }
 
+  console.log(`🔧 [Vite Build Config] Resolved Base URL for Assets: "${base}"`);
+
   return {
     base,
     plugins: [react(), tailwindcss()],
